@@ -1,3 +1,7 @@
 AiArtDesctop/bin/*
 AiArtDesctop/obj/*
 .idea/*
+ImageGeneratorBackend/bin/
+ImageGeneratorBackend/include/
+ImageGeneratorBackend/lib/
+ImageGeneratorBackend/lib64/
