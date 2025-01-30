@@ -5,3 +5,4 @@ ImageGeneratorBackend/bin/
 ImageGeneratorBackend/include/
 ImageGeneratorBackend/lib/
 ImageGeneratorBackend/lib64/
+ImageGeneratorBackend/pyvenv.cfg
