@@ -1,6 +1,7 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from diffusers import StableDiffusionPipeline
+from pydantic import BaseModel
 import torch
 from PIL import Image
 import io
@@ -14,6 +15,11 @@ from diffusers import (
     UniPCMultistepScheduler,
 )
 
+class ImageModel(BaseModel):
+    prompt:str
+    seed:int
+    sampling_steps:int
+
 app = FastAPI()
 
 model_path ="models/Soushiki/SoushikiV1.0.safetensors"
@@ -24,10 +30,11 @@ pipeline = StableDiffusionPipeline.from_single_file(
 ).to("cuda")
 pipeline.scheduler = DDIMScheduler.from_config(pipeline.scheduler.config)
 
-@app.post("/generate_image/{prompt}")
-async def generate_image(prompt: str):
-    generator = torch.Generator(device="cuda").manual_seed(1)
-    image = pipeline(prompt, num_inference_steps=10, generator = generator).images[0]
+@app.post("/generate_image/")
+async def generate_image(image_model:ImageModel):
+
+    generator = torch.Generator(device="cuda").manual_seed(image_model.seed)
+    image = pipeline(image_model.prompt, num_inference_steps=image_model.sampling_steps, generator = generator).images[0]
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format='PNG')
     img_byte_arr = img_byte_arr.getvalue()
@@ -38,6 +45,7 @@ async def generate_image(prompt: str):
                 "format": "PNG",
                 "image_bytes": img_byte_arr.hex(), 
             })
+
 
 if __name__ == "__main__":
     import uvicorn
