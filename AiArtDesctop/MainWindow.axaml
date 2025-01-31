@@ -4,6 +4,7 @@
         Title="AI Image Generator" Width="800" Height="600">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
         <TextBox Name="txtSeedBox"></TextBox>
+        <TextBox Name="txtSamplingSteps"></TextBox>
         <Image Height="500" Width="500" Name="MainImage"></Image>
         <Button Name="GenerateImageButton" Content="Generate Image" Click="OnGenerateImageClick"/>
         <TextBox Name="txtPromptInput"></TextBox>

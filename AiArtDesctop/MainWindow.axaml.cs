@@ -35,6 +35,7 @@ public partial class MainWindow : Window
         }
         imageSetup.Prompt = prompt;
         imageSetup.Seed = ReadSeed();
+        imageSetup.SamplingSteps = ReadSamplingSteps();
         var image = await _imageGenerationService.GenerateImageAsync(imageSetup);
 
         Bitmap bitmap = new Bitmap(new MemoryStream(image));
@@ -46,10 +47,20 @@ public partial class MainWindow : Window
     /// <returns>Parsed seed, if unable to parse default to -1</returns>
     private int ReadSeed()
     {
-        bool ok = false;
-        int seed = -1;
-        ok = int.TryParse(txtSeedBox.Text, out seed);
+        bool ok = false; ;
+        ok = int.TryParse(txtSeedBox.Text, out int seed);
         return ok ? seed : (-1);
     }
+    /// <summary>
+    /// Read and parse the sampling steps textbox
+    /// </summary>
+    /// <returns>Parsed seed, if unable to parse default to 10</returns>
+    private int ReadSamplingSteps()
+    {
+        bool ok = false;
+        ok = int.TryParse(txtSamplingSteps.Text, out int samplingSteps);
+        return ok ? samplingSteps : (10);
+    }
+    
     
 }
