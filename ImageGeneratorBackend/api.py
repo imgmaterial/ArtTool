@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import JSONResponse
 from diffusers import StableDiffusionPipeline
 import torch
 from PIL import Image
@@ -8,15 +9,21 @@ app = FastAPI()
 
 # Load default model
 model_id = "models/waifu-diffusion"
-pipeline = StableDiffusionPipeline.from_pretrained(model_id)
+pipeline = StableDiffusionPipeline.from_pretrained(model_id,safety_checker=None)
 
 @app.post("/generate_image/{prompt}")
 async def generate_image(prompt: str):
-    image = pipeline(prompt).images[0]
+    image = pipeline(prompt, num_inference_steps=25).images[0]
     img_byte_arr = io.BytesIO()
-    image.save("temp", format='PNG')
+    image.save(img_byte_arr, format='PNG')
     img_byte_arr = img_byte_arr.getvalue()
-    return {"image": img_byte_arr}
+    return JSONResponse(
+            content={
+                "status": "success",
+                "message": "Image generated successfully",
+                "format": "PNG",
+                "image_bytes": img_byte_arr.hex(), 
+            })
 
 if __name__ == "__main__":
     import uvicorn

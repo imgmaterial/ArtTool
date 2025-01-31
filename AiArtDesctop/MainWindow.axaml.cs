@@ -1,6 +1,12 @@
 using System;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media.Imaging;
+using System.Drawing;
+using System.IO;
+using Avalonia.Platform;
+using SkiaSharp;
 
 namespace AiArtDesctop;
 
@@ -11,24 +17,26 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
-
-    // Event handler for the button click
+    
     private void OnGenerateImageClick(object sender, RoutedEventArgs e)
     {
-        // Handle the button click event here
         var button = (Button)sender;
-        //MessageBox.Show("Button clicked! Generating image...");
-            
-        // Add your logic for generating the image here
         GenerateImage();
     }
-
-    // Example method for generating an image
-    private void GenerateImage()
+    
+    private async void GenerateImage()
     {
-        // Placeholder for actual image generation logic
-        // For example, you might call a service to generate an image based on user input
-        _imageGenerationService.GenerateImageAsync("1Girl, bob cut hair");
+        string? prompt = PromptInput.Text;
+        if (string.IsNullOrWhiteSpace(prompt))
+        {
+            return;
+        }
+        var image = await _imageGenerationService.GenerateImageAsync(prompt);
+
+        Bitmap bitmap = new Bitmap(new MemoryStream(image));
+        MainImage.Source = bitmap;        
         Console.WriteLine("Generating image...");
     }
+    
+    
 }
