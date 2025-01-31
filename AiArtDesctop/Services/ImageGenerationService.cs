@@ -38,7 +38,6 @@ public class ImageGenerationService
             PropertyNameCaseInsensitive = true
         };
         var apiResponse = JsonSerializer.Deserialize<ApiResponse>(jsonResponse, options);
-        Console.WriteLine(apiResponse.ImageBytes);
         if (apiResponse?.ImageBytes == null)
         {
             throw new Exception("Failed to deserialize the API response.");

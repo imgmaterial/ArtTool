@@ -4,16 +4,30 @@ from diffusers import StableDiffusionPipeline
 import torch
 from PIL import Image
 import io
+from diffusers import (
+    PNDMScheduler,
+    DDIMScheduler,
+    EulerAncestralDiscreteScheduler,
+    LMSDiscreteScheduler,
+    DDPMScheduler,
+    DPMSolverMultistepScheduler,
+    UniPCMultistepScheduler,
+)
 
 app = FastAPI()
 
-# Load default model
-model_id = "models/waifu-diffusion"
-pipeline = StableDiffusionPipeline.from_pretrained(model_id,safety_checker=None)
+model_path ="models/Soushiki/SoushikiV1.0.safetensors"
+pipeline = StableDiffusionPipeline.from_single_file(
+    model_path,
+    torch_dtype=torch.float16,
+    use_safetensors=True
+).to("cuda")
+pipeline.scheduler = DDIMScheduler.from_config(pipeline.scheduler.config)
 
 @app.post("/generate_image/{prompt}")
 async def generate_image(prompt: str):
-    image = pipeline(prompt, num_inference_steps=25).images[0]
+    generator = torch.Generator(device="cuda").manual_seed(1)
+    image = pipeline(prompt, num_inference_steps=10, generator = generator).images[0]
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format='PNG')
     img_byte_arr = img_byte_arr.getvalue()
