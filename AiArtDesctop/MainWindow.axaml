@@ -12,5 +12,6 @@
         </StackPanel>
         <Button Name="GenerateImageButton" Content="Generate Image" Click="OnGenerateImageClick"/>
         <TextBox Name="txtPromptInput"></TextBox>
+        <ColorPicker></ColorPicker>
     </StackPanel>
 </Window>
