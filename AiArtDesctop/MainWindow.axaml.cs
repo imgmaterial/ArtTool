@@ -13,8 +13,8 @@ namespace AiArtDesctop;
 
 public partial class MainWindow : Window
 {
-    private GenerationSetup imageSetup = new GenerationSetup("1Girl", -1, 10);
-    ImageGenerationService _imageGenerationService = new ImageGenerationService();
+    private GenerationSetup _imageSetup = new GenerationSetup("1Girl", -1, 10);
+    private readonly ImageGenerationService _imageGenerationService = new ImageGenerationService();
     public MainWindow()
     {
         InitializeComponent();
@@ -28,16 +28,8 @@ public partial class MainWindow : Window
     
     private async void GenerateImage()
     {
-        string? prompt = txtPromptInput.Text;
-        if (string.IsNullOrWhiteSpace(prompt))
-        {
-            return;
-        }
-        imageSetup.Prompt = prompt;
-        imageSetup.Seed = ReadSeed();
-        imageSetup.SamplingSteps = ReadSamplingSteps();
-        var image = await _imageGenerationService.GenerateImageAsync(imageSetup);
-
+        UpdateCurrentImageRequest();
+        var image = await _imageGenerationService.GenerateImageAsync(_imageSetup);
         Bitmap bitmap = new Bitmap(new MemoryStream(image));
         MainImage.Source = bitmap;        
     }
@@ -48,7 +40,7 @@ public partial class MainWindow : Window
     private int ReadSeed()
     {
         bool ok = false; ;
-        ok = int.TryParse(txtSeedBox.Text, out int seed);
+        ok = int.TryParse(txtSeedBox.Text, out int seed) && seed >= 0;
         return ok ? seed : (-1);
     }
     /// <summary>
@@ -58,9 +50,22 @@ public partial class MainWindow : Window
     private int ReadSamplingSteps()
     {
         bool ok = false;
-        ok = int.TryParse(txtSamplingSteps.Text, out int samplingSteps);
+        ok = int.TryParse(txtSamplingSteps.Text, out int samplingSteps) && samplingSteps > 0;
         return ok ? samplingSteps : (10);
     }
-    
+    /// <summary>
+    /// Writes current state of input fields to image generation data object
+    /// </summary>
+    private void UpdateCurrentImageRequest()
+    {
+        string? prompt = txtPromptInput.Text;
+        if (string.IsNullOrWhiteSpace(prompt))
+        {
+            return;
+        }
+        _imageSetup.Prompt = prompt;
+        _imageSetup.Seed = ReadSeed();
+        _imageSetup.SamplingSteps = ReadSamplingSteps();
+    }
     
 }
