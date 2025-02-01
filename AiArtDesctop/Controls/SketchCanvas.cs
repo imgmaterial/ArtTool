@@ -14,11 +14,15 @@ public class SketchCanvas : Control
     private SKBitmap _skBitmap;
     private SKCanvas _skCanvas;
     private WriteableBitmap _avaloniaBitmap;
-
+    private SKPoint _lastPoint;
+    private SKPaint _skPaint;
+    private bool _isDrawing;
     public SketchCanvas()
     {
         this.AttachedToVisualTree += (s, e) => InitializeSkiaBitmap();
         PointerPressed += OnPointerPressed;
+        PointerMoved += OnPointerMoved;
+        PointerReleased += OnPointerReleased;
     }
     /// <summary>
     /// Initializes the bitmap and canvas and clears them to a default state.
@@ -30,8 +34,11 @@ public class SketchCanvas : Control
         _skBitmap?.Dispose();
         _skBitmap = new SKBitmap(width, height, SKColorType.Bgra8888, SKAlphaType.Premul);
         _skCanvas = new SKCanvas(_skBitmap);
+        _skPaint = new SKPaint
+            { Color = SKColors.Black, StrokeWidth = 10, IsAntialias = true, Style = SKPaintStyle.Stroke };
+        _skCanvas.DrawBitmap(_skBitmap, 0, 0);
         _skCanvas.Clear(SKColors.White);
-        
+        _skPaint.Color = new SKColor(0, 0, 0, 100);
         _avaloniaBitmap = new WriteableBitmap(
             new PixelSize(width, height),
             new Vector(96, 96),
@@ -47,13 +54,39 @@ public class SketchCanvas : Control
     private void OnPointerPressed(object sender, PointerPressedEventArgs e)
     {
         var position = e.GetPosition(this);
-        float x = (float)position.X;
-        float y = (float)position.Y;
+        _lastPoint = new SKPoint((float)position.X, (float)position.Y);
+        _isDrawing = true;
+        e.Pointer.Capture(this);
+    }
+    /// <summary>
+    /// When the user is holding the button down draw a circle in the position
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnPointerMoved(object sender, PointerEventArgs e)
+    {
+        if (!_isDrawing) return;
 
-        _skCanvas.DrawCircle(x, y, 2.5f, new SKPaint { Color = SKColors.Black, StrokeWidth = 5 });
-        Console.WriteLine($"{x},{y}");
+        var position = e.GetPosition(this);
+        var currentPoint = new SKPoint((float)position.X, (float)position.Y);
+        
+        
+        _skCanvas.DrawCircle(currentPoint.X,currentPoint.Y,2.5f, _skPaint);
+        
+
+        _lastPoint = currentPoint;
         InvalidateVisual();
     }
+    /// <summary>
+    /// When mouse button released reset _isDrawing to false.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnPointerReleased(object sender, PointerReleasedEventArgs e)
+    {
+        _isDrawing = false;
+    }
+
     /// <summary>
     /// Queues a re-render when first attached to a visual tree
     /// </summary>
