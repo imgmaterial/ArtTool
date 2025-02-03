@@ -45,8 +45,9 @@ namespace AiArtDesctop.Controls
             _skBitmap = new SKBitmap(width, height, SKColorType.Bgra8888, SKAlphaType.Premul);
             _skCanvas = new SKCanvas(_skBitmap);
             _skPaint = new SKPaint
-                { Color = SKColors.Black, StrokeWidth = 10, IsAntialias = true, Style = SKPaintStyle.Stroke };
+                { Color = SKColors.Black, StrokeWidth = 10, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill };
             Brush = new LineBrush(this._skCanvas, _skPaint);
+            ((LineBrush)Brush).Bitmap = _skBitmap;
             _skCanvas.DrawBitmap(_skBitmap, 0, 0);
             _skCanvas.Clear(SKColors.White);
             _avaloniaBitmap = new WriteableBitmap(
@@ -67,6 +68,7 @@ namespace AiArtDesctop.Controls
             var position = e.GetPosition(this);
             Brush.DrawTouch((float)position.X, (float)position.Y);
             _isDrawing = true;
+            InvalidateVisual();
             e.Pointer.Capture(this);
         }
 
@@ -98,6 +100,7 @@ namespace AiArtDesctop.Controls
         private void OnPointerReleased(object sender, PointerReleasedEventArgs e)
         {
             _isDrawing = false;
+            ((LineBrush)this.Brush).OnPointerReleased();
         }
 
         /// <summary>
