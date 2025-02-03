@@ -70,7 +70,7 @@ public partial class MainWindow : Window
 
     public void OnColorChanged(object sender, ColorChangedEventArgs e)
     {
-        this.SketchCanvas._skPaint.Color = new SKColor(e.NewColor.R, e.NewColor.G, e.NewColor.B, e.NewColor.A);
+        this.SketchCanvas.Brush.Paint.Color = new SKColor(e.NewColor.R, e.NewColor.G, e.NewColor.B, e.NewColor.A);
     }
     
 }

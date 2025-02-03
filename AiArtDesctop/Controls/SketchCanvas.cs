@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using AiArtDesctop.ArtTools;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -7,6 +8,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using SkiaSharp;
+using Brush = AiArtDesctop.ArtTools.Brush;
 
 namespace AiArtDesctop.Controls
 {
@@ -19,8 +21,9 @@ namespace AiArtDesctop.Controls
         private SKCanvas _skCanvas;
         private WriteableBitmap _avaloniaBitmap;
         private SKPoint _lastPoint;
-        public SKPaint _skPaint;
+        private SKPaint _skPaint;
         private bool _isDrawing;
+        public Brush Brush { get; set; }
 
         public SketchCanvas()
         {
@@ -43,9 +46,9 @@ namespace AiArtDesctop.Controls
             _skCanvas = new SKCanvas(_skBitmap);
             _skPaint = new SKPaint
                 { Color = SKColors.Black, StrokeWidth = 10, IsAntialias = true, Style = SKPaintStyle.Stroke };
+            Brush = new LineBrush(this._skCanvas, _skPaint);
             _skCanvas.DrawBitmap(_skBitmap, 0, 0);
             _skCanvas.Clear(SKColors.White);
-            _skPaint.Color = new SKColor(0, 0, 0, 100);
             _avaloniaBitmap = new WriteableBitmap(
                 new PixelSize(width, height),
                 new Vector(96, 96),
@@ -62,7 +65,7 @@ namespace AiArtDesctop.Controls
         private void OnPointerPressed(object sender, PointerPressedEventArgs e)
         {
             var position = e.GetPosition(this);
-            _lastPoint = new SKPoint((float)position.X, (float)position.Y);
+            Brush.DrawTouch((float)position.X, (float)position.Y);
             _isDrawing = true;
             e.Pointer.Capture(this);
         }
@@ -80,7 +83,7 @@ namespace AiArtDesctop.Controls
             var currentPoint = new SKPoint((float)position.X, (float)position.Y);
 
 
-            _skCanvas.DrawCircle(currentPoint.X, currentPoint.Y, 2.5f, _skPaint);
+            Brush.DrawDrag((float)position.X, (float)position.Y);
 
 
             _lastPoint = currentPoint;
