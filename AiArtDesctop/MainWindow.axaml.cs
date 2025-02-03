@@ -67,5 +67,10 @@ public partial class MainWindow : Window
         _imageSetup.Seed = ReadSeed();
         _imageSetup.SamplingSteps = ReadSamplingSteps();
     }
+
+    public void OnColorChanged(object sender, ColorChangedEventArgs e)
+    {
+        this.SketchCanvas._skPaint.Color = new SKColor(e.NewColor.R, e.NewColor.G, e.NewColor.B, e.NewColor.A);
+    }
     
 }

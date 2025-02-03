@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:global="clr-namespace:"
+        xmlns:cc="using:AiArtDesctop.Controls"
         x:Class="AiArtDesctop.MainWindow"
         Title="AI Image Generator" Width="1010" Height="800">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -8,10 +8,10 @@
         <TextBox Name="txtSamplingSteps"></TextBox>
         <StackPanel  Orientation="Horizontal" Spacing="10">
             <Image Height="500" Width="500" Name="MainImage"></Image>
-            <global:SketchCanvas Height="500" Width="500"></global:SketchCanvas>
+            <cc:SketchCanvas Name = "SketchCanvas" Height="500" Width="500"></cc:SketchCanvas>
         </StackPanel>
         <Button Name="GenerateImageButton" Content="Generate Image" Click="OnGenerateImageClick"/>
         <TextBox Name="txtPromptInput"></TextBox>
-        <ColorPicker></ColorPicker>
+        <ColorPicker Name="ColorPicker" ColorChanged="OnColorChanged"></ColorPicker>
     </StackPanel>
 </Window>
