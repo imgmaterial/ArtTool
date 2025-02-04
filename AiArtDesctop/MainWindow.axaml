@@ -4,8 +4,12 @@
         x:Class="AiArtDesctop.MainWindow"
         Title="AI Image Generator" Width="1010" Height="800">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <TextBox Name="txtSeedBox"></TextBox>
-        <TextBox Name="txtSamplingSteps"></TextBox>
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Label Width="90">Seed: </Label>
+            <TextBox Name="txtSeedBox" Width="400"></TextBox>
+            <Label Width="90">Steps: </Label>
+            <TextBox Name="txtSamplingSteps" Width="400"></TextBox>
+        </StackPanel>
         <StackPanel  Orientation="Horizontal" Spacing="10">
             <Image Height="500" Width="500" Name="MainImage"></Image>
             <cc:SketchCanvas Name = "SketchCanvas" Height="500" Width="500"></cc:SketchCanvas>
