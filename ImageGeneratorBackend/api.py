@@ -62,6 +62,17 @@ async def generate_image(image_model:ImageModel):
 
 @app.post("/generate_image_img2img/")
 async def generate_image(image_model:ImageModelImg2Img):
+    print("++++++++++++++++++++++++++++++++++++++++++++")
+    print(f"Prompt : {image_model.prompt}")
+    print(f"Sampling steps {image_model.sampling_steps}")
+    print(f"Seed : {image_model.seed}")
+    print("++++++++++++++++++++++++++++++++++++++++++++")
+    gen_strength = 0.8
+    if (image_model.sampling_steps*gen_strength < 1):
+        return JSONResponse(
+            content={"status": "error", "message": "Low number of sampling steps after strength application. Increase the number of sampling steps"},
+            status_code=400
+        )
     image_bytes = bytes.fromhex(image_model.hex_string)
     expected_size = 500 * 500 * 4  # RGBA
     if len(image_bytes) != expected_size:
@@ -72,7 +83,7 @@ async def generate_image(image_model:ImageModelImg2Img):
     input_image = Image.frombytes("RGBA", (500,500),image_bytes)
     input_image = load_image(input_image)
     generator = torch.Generator(device="cuda").manual_seed(image_model.seed)
-    image = img2imgpipeline(image_model.prompt,image=input_image, num_inference_steps=image_model.sampling_steps, generator = generator).images[0]
+    image = img2imgpipeline(image_model.prompt,image=input_image, num_inference_steps=16, generator = generator, strength = gen_strength).images[0]
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format='PNG')
     img_byte_arr = img_byte_arr.getvalue()
