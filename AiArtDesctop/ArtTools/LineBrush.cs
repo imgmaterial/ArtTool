@@ -17,7 +17,6 @@ public class LineBrush:Brush
     public float BrushRadius { get; set; } = 5f;
     public LineBrush(SKCanvas canvas, SKPaint paint) : base(canvas, BrushType.Line, paint)
     {
-        //this.Paint.StrokeWidth = 40;
     }
     
     
@@ -25,22 +24,17 @@ public class LineBrush:Brush
     public override void DrawTouch(float x, float y)
     {
         _lastBrushPosition = new SKPoint(x, y);
-    
-        // Draw initial circle
         DrawBrushCircle(_lastBrushPosition);
     }
 
     public override void DrawDrag(float x, float y)
     {
-        
         _lastPosition = new SKPoint(x, y);
         
-        // Initialize stroke tracking
         _strokeBrushRadius = BrushRadius;
         _strokeCellSize = 2 * _strokeBrushRadius;
         _currentStrokeCells = new HashSet<(int, int)>();
         
-        // Draw initial circle
         DrawBrushCircle(_lastPosition);
     }
     
@@ -50,26 +44,23 @@ public class LineBrush:Brush
             (int)Math.Floor(position.X / _strokeCellSize),
             (int)Math.Floor(position.Y / _strokeCellSize)
         );
-
-        // Check if cell already occupied
-        Console.WriteLine();
+        
         if (_currentStrokeCells.Contains(cell))
         {
-            Console.WriteLine("Returns");
             return;
         }
-        
-
-        // Draw circle and mark cell
         Canvas.DrawCircle(position, _strokeBrushRadius, Paint);
         _currentStrokeCells.Add(cell);
-        Console.WriteLine(_currentStrokeCells.Count);
     }
     
     public void OnPointerReleased()
     {
-
         _currentStrokeCells = new HashSet<(int, int)>();
+    }
 
+    public void Test()
+    {
+        SKBitmap bitmap = new SKBitmap(128, 128);
+        SKBitmap bitmap2 = new SKBitmap(128, 128);
     }
 }

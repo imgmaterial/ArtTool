@@ -19,7 +19,7 @@ namespace AiArtDesctop.Controls
 
         private SKBitmap _skBitmap;
         private SKCanvas _skCanvas;
-        private WriteableBitmap _avaloniaBitmap;
+        public WriteableBitmap _avaloniaBitmap;
         private SKPoint _lastPoint;
         private SKPaint _skPaint;
         private bool _isDrawing;
@@ -42,10 +42,10 @@ namespace AiArtDesctop.Controls
         {
 
             _skBitmap?.Dispose();
-            _skBitmap = new SKBitmap(width, height, SKColorType.Bgra8888, SKAlphaType.Premul);
+            _skBitmap = new SKBitmap(width, height, SKColorType.Rgba8888, SKAlphaType.Premul);
             _skCanvas = new SKCanvas(_skBitmap);
             _skPaint = new SKPaint
-                { Color = SKColors.Black, StrokeWidth = 10, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill };
+                { Color = SKColors.Black, StrokeWidth = 10, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill , BlendMode = SKBlendMode.Darken};
             Brush = new LineBrush(this._skCanvas, _skPaint);
             ((LineBrush)Brush).Bitmap = _skBitmap;
             _skCanvas.DrawBitmap(_skBitmap, 0, 0);
@@ -53,7 +53,7 @@ namespace AiArtDesctop.Controls
             _avaloniaBitmap = new WriteableBitmap(
                 new PixelSize(width, height),
                 new Vector(96, 96),
-                PixelFormat.Bgra8888,
+                PixelFormat.Rgba8888,
                 AlphaFormat.Premul
             );
         }
@@ -143,6 +143,14 @@ namespace AiArtDesctop.Controls
             _avaloniaBitmap?.Dispose();
             base.OnDetachedFromVisualTree(e);
         }
+
+        public string GetCurrentImageAsHex()
+        {
+            byte[] bytes = _skBitmap.Bytes;
+            string hexString = Convert.ToHexString(bytes);
+            return hexString;
+        }
     }
+    
 }
 

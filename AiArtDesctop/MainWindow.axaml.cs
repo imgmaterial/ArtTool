@@ -15,6 +15,7 @@ public partial class MainWindow : Window
 {
     private GenerationSetup _imageSetup = new GenerationSetup("1Girl", -1, 10);
     private readonly ImageGenerationService _imageGenerationService = new ImageGenerationService();
+    private GenerationSetupImg2Img _imageSetupImg2Img = new GenerationSetupImg2Img("1Girl", -1, 10, string.Empty);
     public MainWindow()
     {
         InitializeComponent();
@@ -29,9 +30,9 @@ public partial class MainWindow : Window
     private async void GenerateImage()
     {
         UpdateCurrentImageRequest();
-        var image = await _imageGenerationService.GenerateImageAsync(_imageSetup);
+        var image = await _imageGenerationService.GenerateImg2ImgImageAsync(_imageSetupImg2Img);
         Bitmap bitmap = new Bitmap(new MemoryStream(image));
-        MainImage.Source = bitmap;        
+        MainImage.Source = bitmap;
     }
     /// <summary>
     /// Read and parse the seed textbox
@@ -66,6 +67,10 @@ public partial class MainWindow : Window
         _imageSetup.Prompt = prompt;
         _imageSetup.Seed = ReadSeed();
         _imageSetup.SamplingSteps = ReadSamplingSteps();
+        _imageSetupImg2Img.Prompt = prompt;
+        _imageSetupImg2Img.Seed = ReadSeed();
+        _imageSetupImg2Img.SamplingSteps = ReadSamplingSteps();
+        _imageSetupImg2Img.HexString = this.SketchCanvas.GetCurrentImageAsHex();
     }
 
     public void OnColorChanged(object sender, ColorChangedEventArgs e)
