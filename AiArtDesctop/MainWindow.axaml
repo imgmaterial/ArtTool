@@ -17,5 +17,6 @@
         <Button Name="GenerateImageButton" Content="Generate Image" Click="OnGenerateImageClick"/>
         <TextBox Name="txtPromptInput"></TextBox>
         <ColorPicker Name="ColorPicker" ColorChanged="OnColorChanged"></ColorPicker>
+        <Slider Name="BrushSlider" Maximum="100" Minimum="1" ValueChanged="BrushSlider_OnValueChanged"></Slider>
     </StackPanel>
 </Window>

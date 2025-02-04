@@ -5,7 +5,9 @@ using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using System.Drawing;
 using System.IO;
+using AiArtDesctop.ArtTools;
 using AiArtDesctop.DataModels;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform;
 using SkiaSharp;
@@ -84,5 +86,9 @@ public partial class MainWindow : Window
     {
         GenerateImage();
     }
-    
+
+    private void BrushSlider_OnValueChanged(object? sender, RangeBaseValueChangedEventArgs e)
+    {
+        ((LineBrush)this.SketchCanvas?.Brush)?.ChangeStrokeWidth((int)e.NewValue); ;
+    }
 }

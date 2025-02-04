@@ -49,7 +49,7 @@ public class LineBrush:Brush
         {
             return;
         }
-        Canvas.DrawCircle(position, _strokeBrushRadius, Paint);
+        Canvas.DrawCircle(position, StrokeWidth, Paint);
         _currentStrokeCells.Add(cell);
     }
     
@@ -57,10 +57,10 @@ public class LineBrush:Brush
     {
         _currentStrokeCells = new HashSet<(int, int)>();
     }
+    
 
-    public void Test()
+    public void ChangeStrokeWidth(int strokeWidth)
     {
-        SKBitmap bitmap = new SKBitmap(128, 128);
-        SKBitmap bitmap2 = new SKBitmap(128, 128);
+        this.StrokeWidth = strokeWidth;
     }
 }
