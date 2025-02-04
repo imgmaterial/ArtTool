@@ -83,7 +83,7 @@ async def generate_image(image_model:ImageModelImg2Img):
     input_image = Image.frombytes("RGBA", (500,500),image_bytes)
     input_image = load_image(input_image)
     generator = torch.Generator(device="cuda").manual_seed(image_model.seed)
-    image = img2imgpipeline(image_model.prompt,image=input_image, num_inference_steps=16, generator = generator, strength = gen_strength).images[0]
+    image = img2imgpipeline(image_model.prompt,image=input_image, num_inference_steps=image_model.sampling_steps, generator = generator, strength = gen_strength).images[0]
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format='PNG')
     img_byte_arr = img_byte_arr.getvalue()

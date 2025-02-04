@@ -6,6 +6,7 @@ using Avalonia.Media.Imaging;
 using System.Drawing;
 using System.IO;
 using AiArtDesctop.DataModels;
+using Avalonia.Input;
 using Avalonia.Platform;
 using SkiaSharp;
 
@@ -19,6 +20,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        SketchCanvas.PointerReleased += OnStrokeFinished;
     }
     
     private void OnGenerateImageClick(object sender, RoutedEventArgs e)
@@ -76,6 +78,11 @@ public partial class MainWindow : Window
     public void OnColorChanged(object sender, ColorChangedEventArgs e)
     {
         this.SketchCanvas.Brush.Paint.Color = new SKColor(e.NewColor.R, e.NewColor.G, e.NewColor.B, e.NewColor.A);
+    }
+
+    private void OnStrokeFinished(object sender, PointerReleasedEventArgs e)
+    {
+        GenerateImage();
     }
     
 }
