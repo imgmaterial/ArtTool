@@ -75,6 +75,8 @@ async def generate_image(image_model:ImageModelImg2Img):
         )
     image_bytes = bytes.fromhex(image_model.hex_string)
     expected_size = 512 * 512 * 4  # RGBA
+    print(len(image_bytes))
+    print(expected_size)
     if len(image_bytes) != expected_size:
         return JSONResponse(
             content={"status": "error", "message": "Invalid image size"},

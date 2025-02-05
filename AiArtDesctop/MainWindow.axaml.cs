@@ -48,7 +48,7 @@ public partial class MainWindow : Window
     {
         bool ok = false; ;
         ok = int.TryParse(txtSeedBox.Text, out int seed) && seed >= 0;
-        return ok ? seed : (-1);
+        return ok ? seed : (42);
     }
     /// <summary>
     /// Read and parse the sampling steps textbox
@@ -58,6 +58,9 @@ public partial class MainWindow : Window
     {
         bool ok = false;
         ok = int.TryParse(txtSamplingSteps.Text, out int samplingSteps) && samplingSteps > 0;
+        Console.WriteLine("++++++++++++++++++++++++++++");
+        Console.WriteLine(samplingSteps);
+        Console.WriteLine("++++++++++++++++++++++++++++");
         return ok ? samplingSteps : (10);
     }
     /// <summary>
@@ -66,14 +69,10 @@ public partial class MainWindow : Window
     private void UpdateCurrentImageRequest()
     {
         string? prompt = txtPromptInput.Text;
-        if (string.IsNullOrWhiteSpace(prompt))
-        {
-            return;
-        }
-        _imageSetup.Prompt = prompt;
-        _imageSetup.Seed = ReadSeed();
-        _imageSetup.SamplingSteps = ReadSamplingSteps();
-        _imageSetupImg2Img.Prompt = prompt;
+        // _imageSetup.Prompt = prompt;
+        // _imageSetup.Seed = ReadSeed();
+        // _imageSetup.SamplingSteps = ReadSamplingSteps();
+        _imageSetupImg2Img.Prompt = string.IsNullOrEmpty(prompt) ? "1Girl" : prompt;
         _imageSetupImg2Img.Seed = ReadSeed();
         _imageSetupImg2Img.SamplingSteps = ReadSamplingSteps();
         _imageSetupImg2Img.HexString = this.SketchCanvas.GetCurrentImageAsHex();
