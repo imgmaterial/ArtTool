@@ -19,4 +19,9 @@ public abstract class Brush:IBrush
     
     public abstract void DrawTouch(float x, float y);
     public abstract void DrawDrag(float x, float y);
+
+    public virtual void ChangeStrokeWidth(int strokeWidth)
+    {
+        this.StrokeWidth = strokeWidth;
+    }
 }

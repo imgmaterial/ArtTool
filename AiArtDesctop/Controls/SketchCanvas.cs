@@ -93,7 +93,6 @@ namespace AiArtDesctop.Controls
         private void OnPointerReleased(object sender, PointerReleasedEventArgs e)
         {
             _isDrawing = false;
-            ((LineBrush)this.Brush).OnPointerReleased();
         }
 
         /// <summary>

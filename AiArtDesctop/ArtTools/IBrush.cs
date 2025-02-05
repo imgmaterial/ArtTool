@@ -11,5 +11,7 @@ public interface IBrush
 
     public void DrawTouch(float x, float y);
     public void DrawDrag(float x, float y);
-    
+
+    public void ChangeStrokeWidth(int strokeWidth);
+
 }

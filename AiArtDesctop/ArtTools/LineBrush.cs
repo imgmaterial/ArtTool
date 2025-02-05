@@ -10,11 +10,7 @@ public class LineBrush:Brush
 {
     public SKBitmap Bitmap { get; set; }
     private SKPoint _lastBrushPosition;
-    private float _strokeBrushRadius;
-    private float _strokeCellSize;
-    private HashSet<(int, int)> _currentStrokeCells = new HashSet<(int, int)>();
     private SKPoint _lastPosition;
-    public float BrushRadius { get; set; } = 5f;
     public LineBrush(SKCanvas canvas, SKPaint paint) : base(canvas, BrushType.Line, paint)
     {
     }
@@ -30,37 +26,13 @@ public class LineBrush:Brush
     public override void DrawDrag(float x, float y)
     {
         _lastPosition = new SKPoint(x, y);
-        
-        _strokeBrushRadius = BrushRadius;
-        _strokeCellSize = 2 * _strokeBrushRadius;
-        _currentStrokeCells = new HashSet<(int, int)>();
-        
         DrawBrushCircle(_lastPosition);
     }
     
     private void DrawBrushCircle(SKPoint position)
     {
-        var cell = (
-            (int)Math.Floor(position.X / _strokeCellSize),
-            (int)Math.Floor(position.Y / _strokeCellSize)
-        );
-        
-        if (_currentStrokeCells.Contains(cell))
-        {
-            return;
-        }
         Canvas.DrawCircle(position, StrokeWidth, Paint);
-        _currentStrokeCells.Add(cell);
     }
     
-    public void OnPointerReleased()
-    {
-        _currentStrokeCells = new HashSet<(int, int)>();
-    }
     
-
-    public void ChangeStrokeWidth(int strokeWidth)
-    {
-        this.StrokeWidth = strokeWidth;
-    }
 }
