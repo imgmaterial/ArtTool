@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using AiArtDesctop.ArtTools;
 using Avalonia;
@@ -45,7 +46,7 @@ namespace AiArtDesctop.Controls
             _skBitmap = new SKBitmap(width, height, SKColorType.Rgba8888, SKAlphaType.Premul);
             _skCanvas = new SKCanvas(_skBitmap);
             _skPaint = new SKPaint
-                { Color = SKColors.Black, StrokeWidth = 10, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill , BlendMode = SKBlendMode.Darken};
+                { Color = SKColors.Black, StrokeWidth = 10, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill };
             Brush = new LineBrush(this._skCanvas, _skPaint);
             ((LineBrush)Brush).Bitmap = _skBitmap;
             _skCanvas.DrawBitmap(_skBitmap, 0, 0);
@@ -130,6 +131,33 @@ namespace AiArtDesctop.Controls
             }
 
             context.DrawImage(_avaloniaBitmap, new Rect(0, 0, width, height));
+        }
+
+        public void ClearCanvas()
+        {
+            _skCanvas.Clear(SKColors.White);
+            InvalidateVisual();
+        }
+
+        private SKBitmap ToSkiaBitmap(Bitmap bitmap)
+        {
+            using (var stream = new MemoryStream())
+            {
+                bitmap.Save(stream);
+
+                stream.Seek(0, SeekOrigin.Begin);
+
+                return SKBitmap.Decode(stream);
+            }
+        }
+
+        public void SetImage(Bitmap image)
+        {
+            
+            this._skCanvas.Clear(SKColors.White);
+            SKBitmap newBitmap = ToSkiaBitmap(image);
+            _skCanvas.DrawBitmap(newBitmap,0,0);
+            InvalidateVisual();
         }
 
         /// <summary>

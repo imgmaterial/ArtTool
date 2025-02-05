@@ -11,7 +11,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform;
 using SkiaSharp;
-
+using Avalonia.Skia;
 namespace AiArtDesctop;
 
 public partial class MainWindow : Window
@@ -90,5 +90,16 @@ public partial class MainWindow : Window
     private void BrushSlider_OnValueChanged(object? sender, RangeBaseValueChangedEventArgs e)
     {
         ((LineBrush)this.SketchCanvas?.Brush)?.ChangeStrokeWidth((int)e.NewValue); ;
+    }
+
+    private void ClearCanvasButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        this.SketchCanvas.ClearCanvas();
+    }
+
+    private void UseCurrentImageButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        Bitmap image = this.MainImage.Source as Bitmap;
+        SketchCanvas.SetImage(image);
     }
 }
