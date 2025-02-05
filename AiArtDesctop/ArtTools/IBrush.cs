@@ -8,6 +8,8 @@ public interface IBrush
     public int StrokeWidth { get; set; }
     public BrushType Type { get; set; }
     public SKPaint Paint { get; set; }
+    
+    public SKBitmap Bitmap { get; set; }
 
     public void DrawTouch(float x, float y);
     public void DrawDrag(float x, float y);

@@ -48,7 +48,7 @@ namespace AiArtDesctop.Controls
             _skPaint = new SKPaint
                 { Color = SKColors.Black, StrokeWidth = 10, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill };
             Brush = new LineBrush(this._skCanvas, _skPaint);
-            ((LineBrush)Brush).Bitmap = _skBitmap;
+            Brush.Bitmap = _skBitmap;
             _skCanvas.DrawBitmap(_skBitmap, 0, 0);
             _skCanvas.Clear(SKColors.White);
             _avaloniaBitmap = new WriteableBitmap(

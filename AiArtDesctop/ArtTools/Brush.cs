@@ -9,6 +9,8 @@ public abstract class Brush:IBrush
     public BrushType Type { get; set; }
     public SKPaint Paint { get; set; }
     public SKCanvas Canvas { get; set; }
+    
+    public SKBitmap Bitmap { get; set; }
 
     public Brush(SKCanvas canvas,BrushType type, SKPaint paint)
     {
