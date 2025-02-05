@@ -74,13 +74,13 @@ async def generate_image(image_model:ImageModelImg2Img):
             status_code=400
         )
     image_bytes = bytes.fromhex(image_model.hex_string)
-    expected_size = 500 * 500 * 4  # RGBA
+    expected_size = 512 * 512 * 4  # RGBA
     if len(image_bytes) != expected_size:
         return JSONResponse(
             content={"status": "error", "message": "Invalid image size"},
             status_code=400
         )
-    input_image = Image.frombytes("RGBA", (500,500),image_bytes)
+    input_image = Image.frombytes("RGBA", (512,512),image_bytes)
     input_image = load_image(input_image)
     generator = torch.Generator(device="cuda").manual_seed(image_model.seed)
     image = img2imgpipeline(image_model.prompt,image=input_image, num_inference_steps=image_model.sampling_steps, generator = generator, strength = gen_strength).images[0]

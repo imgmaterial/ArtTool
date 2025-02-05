@@ -8,6 +8,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Platform.Storage;
 using SkiaSharp;
 using Brush = AiArtDesctop.ArtTools.Brush;
 
@@ -39,7 +40,7 @@ namespace AiArtDesctop.Controls
         /// </summary>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        private void InitializeSkiaBitmap(int width = 500, int height = 500)
+        private void InitializeSkiaBitmap(int width = 512, int height = 512)
         {
 
             _skBitmap?.Dispose();
@@ -121,8 +122,8 @@ namespace AiArtDesctop.Controls
         public override void Render(DrawingContext context)
         {
             base.Render(context);
-            int width = 500;
-            int height = 500;
+            int width = 512;
+            int height = 512;
 
             using (var buffer = _avaloniaBitmap.Lock())
             {
@@ -151,9 +152,9 @@ namespace AiArtDesctop.Controls
             }
         }
 
-        public void SetImage(Bitmap image)
+        public void SetImage(Bitmap? image)
         {
-            
+            if (image == null) return;
             this._skCanvas.Clear(SKColors.White);
             SKBitmap newBitmap = ToSkiaBitmap(image);
             _skCanvas.DrawBitmap(newBitmap,0,0);
@@ -177,6 +178,11 @@ namespace AiArtDesctop.Controls
             byte[] bytes = _skBitmap.Bytes;
             string hexString = Convert.ToHexString(bytes);
             return hexString;
+        }
+
+        public void SaveImageAs(string filename, Bitmap? bitmap)
+        {
+            bitmap?.Save(filename);
         }
     }
     

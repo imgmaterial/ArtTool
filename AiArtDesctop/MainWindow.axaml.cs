@@ -10,6 +10,7 @@ using AiArtDesctop.DataModels;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform;
+using Avalonia.Platform.Storage;
 using SkiaSharp;
 using Avalonia.Skia;
 namespace AiArtDesctop;
@@ -99,7 +100,14 @@ public partial class MainWindow : Window
 
     private void UseCurrentImageButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        Bitmap image = this.MainImage.Source as Bitmap;
+        var image = this.MainImage.Source as Bitmap;
         SketchCanvas.SetImage(image);
+    }
+
+    private async void SaveImage_OnClick(object? sender, RoutedEventArgs e)
+    {
+
+        Bitmap image = this.MainImage.Source as Bitmap;
+        image?.Save("test.png");
     }
 }

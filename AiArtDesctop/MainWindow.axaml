@@ -11,12 +11,13 @@
             <TextBox Name="txtSamplingSteps" Width="400"></TextBox>
         </StackPanel>
         <StackPanel  Orientation="Horizontal" Spacing="10">
-            <Image Height="500" Width="500" Name="MainImage"></Image>
-            <cc:SketchCanvas Name = "SketchCanvas" Height="500" Width="500"></cc:SketchCanvas>
+            <Image Height="512" Width="512" Name="MainImage"></Image>
+            <cc:SketchCanvas Name = "SketchCanvas" Height="512" Width="512"></cc:SketchCanvas>
         </StackPanel>
         <Button Name="GenerateImageButton" Content="Generate Image" Click="OnGenerateImageClick"/>
         <Button Name="ClearCanvasButton" Content="Clear Canvas" Click="ClearCanvasButton_OnClick"/>
         <Button Name="UseCurrentImageButton" Content="Use Image" Click="UseCurrentImageButton_OnClick"/>
+        <Button Name="SaveImage" Content="Save Image" Click="SaveImage_OnClick"/>
         <TextBox Name="txtPromptInput"></TextBox>
         <ColorPicker Name="ColorPicker" ColorChanged="OnColorChanged"></ColorPicker>
         <Slider Name="BrushSlider" Maximum="100" Minimum="1" ValueChanged="BrushSlider_OnValueChanged"></Slider>
