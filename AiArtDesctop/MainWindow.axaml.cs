@@ -69,9 +69,6 @@ public partial class MainWindow : Window
     private void UpdateCurrentImageRequest()
     {
         string? prompt = txtPromptInput.Text;
-        // _imageSetup.Prompt = prompt;
-        // _imageSetup.Seed = ReadSeed();
-        // _imageSetup.SamplingSteps = ReadSamplingSteps();
         _imageSetupImg2Img.Prompt = string.IsNullOrEmpty(prompt) ? "1Girl" : prompt;
         _imageSetupImg2Img.Seed = ReadSeed();
         _imageSetupImg2Img.SamplingSteps = ReadSamplingSteps();
@@ -90,7 +87,7 @@ public partial class MainWindow : Window
 
     private void BrushSlider_OnValueChanged(object? sender, RangeBaseValueChangedEventArgs e)
     {
-        ((LineBrush)this.SketchCanvas?.Brush)?.ChangeStrokeWidth((int)e.NewValue); ;
+        this.SketchCanvas?.Brush.ChangeStrokeWidth((int)e.NewValue); ;
     }
 
     private void ClearCanvasButton_OnClick(object? sender, RoutedEventArgs e)
