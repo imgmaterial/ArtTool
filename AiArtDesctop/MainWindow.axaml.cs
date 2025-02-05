@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using AiArtDesctop.ArtTools;
 using AiArtDesctop.DataModels;
+using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform;

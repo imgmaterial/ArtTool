@@ -21,8 +21,7 @@ namespace AiArtDesctop.Controls
 
         private SKBitmap _skBitmap;
         private SKCanvas _skCanvas;
-        public WriteableBitmap _avaloniaBitmap;
-        private SKPoint _lastPoint;
+        private WriteableBitmap _avaloniaBitmap;
         private SKPaint _skPaint;
         private bool _isDrawing;
         public Brush Brush { get; set; }
@@ -71,7 +70,6 @@ namespace AiArtDesctop.Controls
             Brush.DrawTouch((float)position.X, (float)position.Y);
             _isDrawing = true;
             InvalidateVisual();
-            e.Pointer.Capture(this);
         }
 
         /// <summary>
@@ -82,15 +80,8 @@ namespace AiArtDesctop.Controls
         private void OnPointerMoved(object sender, PointerEventArgs e)
         {
             if (!_isDrawing) return;
-
             var position = e.GetPosition(this);
-            var currentPoint = new SKPoint((float)position.X, (float)position.Y);
-
-
             Brush.DrawDrag((float)position.X, (float)position.Y);
-
-
-            _lastPoint = currentPoint;
             InvalidateVisual();
         }
 
@@ -180,10 +171,6 @@ namespace AiArtDesctop.Controls
             return hexString;
         }
 
-        public void SaveImageAs(string filename, Bitmap? bitmap)
-        {
-            bitmap?.Save(filename);
-        }
     }
     
 }
