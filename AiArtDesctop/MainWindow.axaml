@@ -1,25 +1,24 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cc="using:AiArtDesctop.Controls"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AiArtDesctop.MainWindow"
-        Title="AI Image Generator" Width="1010" Height="800">
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <StackPanel Orientation="Horizontal" Spacing="10">
-            <Label Width="90">Seed: </Label>
-            <TextBox Name="txtSeedBox" Width="400"></TextBox>
-            <Label Width="90">Steps: </Label>
-            <TextBox Name="txtSamplingSteps" Width="400"></TextBox>
+        Title="MainWindow">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+    
+        <!-- Sidebar with navigation buttons -->
+        <StackPanel Grid.Column="0" Background="DimGray">
+            <Button Name="HomeButton" Content="Home" Margin="0,0,0,5"/>
+            <Button Name="SettingsButton" Content="Settings" Margin="0,0,0,5"/>
+            <Button Name="ProfileButton" Content="Profile"/>
         </StackPanel>
-        <StackPanel  Orientation="Horizontal" Spacing="10">
-            <Image Height="512" Width="512" Name="MainImage"></Image>
-            <cc:SketchCanvas Name = "SketchCanvas" Height="512" Width="512"></cc:SketchCanvas>
-        </StackPanel>
-        <Button Name="GenerateImageButton" Content="Generate Image" Click="OnGenerateImageClick"/>
-        <Button Name="ClearCanvasButton" Content="Clear Canvas" Click="ClearCanvasButton_OnClick"/>
-        <Button Name="UseCurrentImageButton" Content="Use Image" Click="UseCurrentImageButton_OnClick"/>
-        <Button Name="SaveImage" Content="Save Image" Click="SaveImage_OnClick"/>
-        <TextBox Name="txtPromptInput"></TextBox>
-        <ColorPicker Name="ColorPicker" ColorChanged="OnColorChanged"></ColorPicker>
-        <Slider Name="BrushSlider" Maximum="100" Minimum="1" ValueChanged="BrushSlider_OnValueChanged"></Slider>
-    </StackPanel>
+    
+        <!-- Content area where pages will be shown -->
+        <ContentControl x:Name="RealTime" Grid.Column="1"/>
+    </Grid>
 </Window>
