@@ -32,15 +32,12 @@ public partial class RealTime : UserControl
     
     private void OnGenerateImageClick(object sender, RoutedEventArgs e)
     {
-        var button = (Button)sender;
         GenerateImage();
     }
     
     private async void GenerateImage()
     {
-        Console.WriteLine("Testing");
         UpdateCurrentImageRequest();
-        Console.WriteLine("Testing2");
         var image = await _imageGenerationService.GenerateImg2ImgImageAsync(_imageSetupImg2Img);
         Bitmap bitmap = new Bitmap(new MemoryStream(image));
         MainImage.Source = bitmap;
@@ -63,9 +60,6 @@ public partial class RealTime : UserControl
     {
         bool ok = false;
         ok = int.TryParse(txtSamplingSteps.Text, out int samplingSteps) && samplingSteps > 0;
-        Console.WriteLine("++++++++++++++++++++++++++++");
-        Console.WriteLine(samplingSteps);
-        Console.WriteLine("++++++++++++++++++++++++++++");
         return ok ? samplingSteps : (10);
     }
     /// <summary>
