@@ -10,15 +10,13 @@
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-    
-        <!-- Sidebar with navigation buttons -->
+        
         <StackPanel Grid.Column="0" Background="DimGray">
-            <Button Name="HomeButton" Content="Home" Margin="0,0,0,5"/>
-            <Button Name="SettingsButton" Content="Settings" Margin="0,0,0,5"/>
+            <Button Name="text2image" Content="Text to Image" Click="Text2image_OnClick" Margin="0,0,0,5"/>
+            <Button Name="realTime" Content="Real Time Generation" Click="RealTime_OnClick" Margin="0,0,0,5"/>
             <Button Name="ProfileButton" Content="Profile"/>
         </StackPanel>
-    
-        <!-- Content area where pages will be shown -->
+        
         <ContentControl x:Name="RealTime" Grid.Column="1"/>
     </Grid>
 </Window>
