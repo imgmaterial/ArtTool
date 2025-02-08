@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using AiArtDesctop.ArtTools;
 using AiArtDesctop.DataModels;
+using AiArtDesctop.Services;
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
@@ -19,7 +20,7 @@ namespace AiArtDesctop;
 
 public partial class RealTime : UserControl
 {
-    private GenerationSetup _imageSetup = new GenerationSetup("1Girl", -1, 10);
+    private readonly ImageSaveService _saveService = new ImageSaveService();
     private readonly ImageGenerationService _imageGenerationService = new ImageGenerationService();
     private GenerationSetupImg2Img _imageSetupImg2Img = new GenerationSetupImg2Img("1Girl", -1, 10, string.Empty);
     public RealTime()
@@ -102,8 +103,12 @@ public partial class RealTime : UserControl
 
     private async void SaveImage_OnClick(object? sender, RoutedEventArgs e)
     {
-
-        Bitmap image = this.MainImage.Source as Bitmap;
-        image?.Save("test.png");
+        Bitmap? image = this.MainImage.Source as Bitmap;
+        var window = TopLevel.GetTopLevel(this) as Window;
+        if (image is null || window is null)
+        {
+            return;
+        }
+        await _saveService.SaveImage(image, window);
     }
 }

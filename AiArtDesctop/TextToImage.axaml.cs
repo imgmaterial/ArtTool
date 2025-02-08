@@ -1,5 +1,6 @@
 using System.IO;
 using AiArtDesctop.DataModels;
+using AiArtDesctop.Services;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -12,6 +13,7 @@ public partial class TextToImage : UserControl
 {
     private GenerationSetup _imageSetup = new GenerationSetup("1Girl", -1, 10);
     private readonly ImageGenerationService _imageGenerationService = new ImageGenerationService();
+    private readonly ImageSaveService _saveService = new ImageSaveService();
     public TextToImage()
     {
         InitializeComponent();
@@ -61,9 +63,14 @@ public partial class TextToImage : UserControl
         GenerateImage();
     }
 
-    private void SaveImage_OnClick(object? sender, RoutedEventArgs e)
+    private async void SaveImage_OnClick(object? sender, RoutedEventArgs e)
     {
-        Bitmap image = this.MainImage.Source as Bitmap;
-        image?.Save("test.png");
+        Bitmap? image = this.MainImage.Source as Bitmap;
+        var window = TopLevel.GetTopLevel(this) as Window;
+        if (image is null || window is null)
+        {
+            return;
+        }
+        await _saveService.SaveImage(image, window);
     }
 }
