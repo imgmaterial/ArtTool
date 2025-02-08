@@ -14,7 +14,7 @@
         <StackPanel Grid.Column="0" Background="DimGray">
             <Button Name="text2image" Content="Text to Image" Click="Text2image_OnClick" Margin="0,0,0,5"/>
             <Button Name="realTime" Content="Real Time Generation" Click="RealTime_OnClick" Margin="0,0,0,5"/>
-            <Button Name="ProfileButton" Content="Profile"/>
+            <Button Name="ProfileButton" Click="ProfileButton_OnClick" Content="Profile"/>
         </StackPanel>
         
         <ContentControl x:Name="RealTime" Grid.Column="1"/>

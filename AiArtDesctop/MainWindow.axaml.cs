@@ -8,8 +8,8 @@ namespace AiArtDesctop;
 public partial class MainWindow : Window
 {
     private readonly NavigationManager _navManager;
-    private RealTime _realTime = new RealTime();
-    private TextToImage _textToImage = new TextToImage();
+    private readonly RealTime _realTime = new RealTime();
+    private readonly TextToImage _textToImage = new TextToImage();
     public MainWindow()
     {
         InitializeComponent();
@@ -26,6 +26,11 @@ public partial class MainWindow : Window
     }
 
     private void RealTime_OnClick(object? sender, RoutedEventArgs e)
+    {
+        _navManager.NavigateTo(_realTime);
+    }
+
+    private void ProfileButton_OnClick(object? sender, RoutedEventArgs e)
     {
         _navManager.NavigateTo(_realTime);
     }
