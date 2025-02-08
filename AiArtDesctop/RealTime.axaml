@@ -2,21 +2,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cc="using:AiArtDesctop.Controls"
         x:Class="AiArtDesctop.RealTime">
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="1100">
         <StackPanel Orientation="Horizontal" Spacing="10">
             <Label Width="90">Seed: </Label>
             <TextBox Name="txtSeedBox" Width="400"></TextBox>
             <Label Width="90">Steps: </Label>
             <TextBox Name="txtSamplingSteps" Width="400"></TextBox>
         </StackPanel>
-        <StackPanel  Orientation="Horizontal" Spacing="10">
+        <StackPanel  Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
             <Image Height="512" Width="512" Name="MainImage"></Image>
             <cc:SketchCanvas Name = "SketchCanvas" PointerReleased="OnStrokeFinished" Height="512" Width="512"></cc:SketchCanvas>
         </StackPanel>
-        <Button Name="GenerateImageButton" Content="Generate Image" Click="OnGenerateImageClick"/>
-        <Button Name="ClearCanvasButton" Content="Clear Canvas" Click="ClearCanvasButton_OnClick"/>
-        <Button Name="UseCurrentImageButton" Content="Use Image" Click="UseCurrentImageButton_OnClick"/>
-        <Button Name="SaveImage" Content="Save Image" Click="SaveImage_OnClick"/>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Name="GenerateImageButton" Content="Generate Image" Click="OnGenerateImageClick" Margin="5"/>
+            <Button Name="ClearCanvasButton" Content="Clear Canvas" Click="ClearCanvasButton_OnClick" Margin="5"/>
+            <Button Name="UseCurrentImageButton" Content="Use Image" Click="UseCurrentImageButton_OnClick" Margin="5"/>
+            <Button Name="SaveImage" Content="Save Image" Click="SaveImage_OnClick" Margin="5"/>
+        </StackPanel>
         <TextBox Name="txtPromptInput"></TextBox>
         <ColorPicker Name="ColorPicker" ColorChanged="OnColorChanged"></ColorPicker>
         <Slider Name="BrushSlider" Maximum="100" Minimum="1" ValueChanged="BrushSlider_OnValueChanged"></Slider>

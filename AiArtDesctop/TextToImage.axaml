@@ -5,17 +5,19 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AiArtDesctop.TextToImage">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <StackPanel Orientation="Horizontal" Spacing="10">
+        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
             <Label Width="90">Seed: </Label>
             <TextBox Name="txtSeedBox" Width="400"></TextBox>
             <Label Width="90">Steps: </Label>
             <TextBox Name="txtSamplingSteps" Width="400"></TextBox>
         </StackPanel>
-        <StackPanel  Orientation="Horizontal" Spacing="10">
+        <StackPanel  Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
             <Image Height="512" Width="512" Name="MainImage"></Image>
         </StackPanel>
-        <Button Name="GenerateImageButton" Content="Generate Image" Click="GenerateImageButton_OnClick"/>
-        <Button Name="SaveImage" Content="Save Image" Click="SaveImage_OnClick"/>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Name="GenerateImageButton" Content="Generate Image" Click="GenerateImageButton_OnClick" Margin="5"/>
+            <Button Name="SaveImage" Content="Save Image" Click="SaveImage_OnClick" Margin="5"/>
+        </StackPanel>
         <TextBox Name="txtPromptInput"></TextBox>
     </StackPanel>
 </UserControl>
