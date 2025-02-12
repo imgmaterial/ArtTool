@@ -19,6 +19,7 @@
             <Button Name="UseCurrentImageButton" Content="Use Image" Click="UseCurrentImageButton_OnClick" Margin="5"/>
             <Button Name="SaveImage" Content="Save Image" Click="SaveImage_OnClick" Margin="5"/>
         </StackPanel>
+        <ComboBox Name="ModelDropDown"></ComboBox>
         <TextBox Name="txtPromptInput"></TextBox>
         <ColorPicker Name="ColorPicker" ColorChanged="OnColorChanged"></ColorPicker>
         <Slider Name="BrushSlider" Maximum="100" Minimum="1" ValueChanged="BrushSlider_OnValueChanged"></Slider>

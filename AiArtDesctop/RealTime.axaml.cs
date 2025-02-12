@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -26,7 +27,6 @@ public partial class RealTime : UserControl
     public RealTime()
     {
         InitializeComponent();
-        this.SketchCanvas.PointerReleased += OnStrokeFinished;
     }
     
 
@@ -82,6 +82,7 @@ public partial class RealTime : UserControl
 
     private void OnStrokeFinished(object sender, PointerReleasedEventArgs e)
     {
+        Console.WriteLine("test");
         GenerateImage();
     }
 

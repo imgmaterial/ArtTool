@@ -6,6 +6,7 @@ import torch
 from PIL import Image
 from diffusers.utils import make_image_grid, load_image
 import io
+from PipelineManager import PipelineManager, PipelineType
 from diffusers import (
     PNDMScheduler,
     DDIMScheduler,
@@ -30,25 +31,17 @@ class ImageModelImg2Img(BaseModel):
 app = FastAPI()
 
 model_path ="models/Soushiki/SoushikiV1.0.safetensors"
-pipeline = StableDiffusionPipeline.from_single_file(
-    model_path,
-    torch_dtype=torch.float16,
-    use_safetensors=True
-).to("cuda")
-pipeline.scheduler = DDIMScheduler.from_config(pipeline.scheduler.config)
-
-img2imgpipeline = StableDiffusionImg2ImgPipeline.from_single_file(
-    model_path,
-    torch_dtype=torch.float16,
-    use_safetensors=True
-).to("cuda")
-img2imgpipeline.scheduler = DDIMScheduler.from_config(img2imgpipeline.scheduler.config)
+pipeline_manager = PipelineManager(PipelineType.SD_img2img, model_path)
+pipeline_manager.pipeline.scheduler = DDIMScheduler.from_config(pipeline_manager.pipeline.scheduler.config)
 
 
 @app.post("/generate_image/")
 async def generate_image(image_model:ImageModel):
+    if (pipeline_manager.pipeline_type != PipelineType.SD_text2img and pipeline_manager.pipeline_type != PipelineType.SDXL_text2img):
+        print("++++++++++++++++++++++++++++++++++++++RUN+++++++++++++++++++++++++++++++++++++++")
+        pipeline_manager.set_pipeline(PipelineType.SD_text2img, model_path)
     generator = torch.Generator(device="cuda").manual_seed(image_model.seed)
-    image = pipeline(image_model.prompt, num_inference_steps=image_model.sampling_steps, generator = generator).images[0]
+    image = pipeline_manager.pipeline(image_model.prompt, num_inference_steps=image_model.sampling_steps, generator = generator).images[0]
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format='PNG')
     img_byte_arr = img_byte_arr.getvalue()
@@ -62,11 +55,10 @@ async def generate_image(image_model:ImageModel):
 
 @app.post("/generate_image_img2img/")
 async def generate_image(image_model:ImageModelImg2Img):
-    print("++++++++++++++++++++++++++++++++++++++++++++")
-    print(f"Prompt : {image_model.prompt}")
-    print(f"Sampling steps {image_model.sampling_steps}")
-    print(f"Seed : {image_model.seed}")
-    print("++++++++++++++++++++++++++++++++++++++++++++")
+    if (pipeline_manager.pipeline_type != PipelineType.SD_img2img and pipeline_manager.pipeline_type != PipelineType.SDXL_img2img):
+        print("++++++++++++++++++++++++++++++++++++++RUN+++++++++++++++++++++++++++++++++++++++")
+        pipeline_manager.set_pipeline(PipelineType.SD_img2img, model_path)
+
     gen_strength = 0.8
     if (image_model.sampling_steps*gen_strength < 1):
         return JSONResponse(
@@ -76,7 +68,6 @@ async def generate_image(image_model:ImageModelImg2Img):
     image_bytes = bytes.fromhex(image_model.hex_string)
     expected_size = 512 * 512 * 4  # RGBA
     print(len(image_bytes))
-    print(expected_size)
     if len(image_bytes) != expected_size:
         return JSONResponse(
             content={"status": "error", "message": "Invalid image size"},
@@ -85,7 +76,7 @@ async def generate_image(image_model:ImageModelImg2Img):
     input_image = Image.frombytes("RGBA", (512,512),image_bytes)
     input_image = load_image(input_image)
     generator = torch.Generator(device="cuda").manual_seed(image_model.seed)
-    image = img2imgpipeline(image_model.prompt,image=input_image, num_inference_steps=image_model.sampling_steps, generator = generator, strength = gen_strength).images[0]
+    image = pipeline_manager.pipeline(image_model.prompt,image=input_image, num_inference_steps=image_model.sampling_steps, generator = generator, strength = gen_strength).images[0]
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format='PNG')
     img_byte_arr = img_byte_arr.getvalue()

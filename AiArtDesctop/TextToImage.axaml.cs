@@ -11,7 +11,7 @@ namespace AiArtDesctop;
 
 public partial class TextToImage : UserControl
 {
-    private GenerationSetup _imageSetup = new GenerationSetup("1Girl", -1, 10);
+    private GenerationSetup _imageSetup = new GenerationSetup("1Girl", -1, 5);
     private readonly ImageGenerationService _imageGenerationService = new ImageGenerationService();
     private readonly ImageSaveService _saveService = new ImageSaveService();
     public TextToImage()
