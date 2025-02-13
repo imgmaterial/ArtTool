@@ -29,6 +29,7 @@ class ImageModelImg2Img(BaseModel):
     sampling_steps:int
     hex_string:str
     model_path:str
+    model_type:int
 
 app = FastAPI()
 
@@ -57,8 +58,8 @@ async def generate_image(image_model:ImageModel):
 
 @app.post("/generate_image_img2img/")
 async def generate_image(image_model:ImageModelImg2Img):
-    if (pipeline_manager.pipeline_type != PipelineType.SD_img2img and pipeline_manager.pipeline_type != PipelineType.SDXL_img2img or pipeline_manager.model != f"models/{image_model.model_path}"):
-        pipeline_manager.set_pipeline(PipelineType.SD_img2img, f"models/{image_model.model_path}")
+    if (pipeline_manager.pipeline_type != PipelineType(image_model.model_type) or pipeline_manager.model != f"models/{image_model.model_path}"):
+        pipeline_manager.set_pipeline(PipelineType(image_model.model_type), f"models/{image_model.model_path}")
         pipeline_manager.pipeline.scheduler = DDIMScheduler.from_config(pipeline_manager.pipeline.scheduler.config)
 
     gen_strength = 0.8

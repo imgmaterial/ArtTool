@@ -23,12 +23,14 @@ public partial class RealTime : UserControl
 {
     private readonly ImageSaveService _saveService = new ImageSaveService();
     private readonly ImageGenerationService _imageGenerationService = new ImageGenerationService();
-    private GenerationSetupImg2Img _imageSetupImg2Img = new GenerationSetupImg2Img("1Girl", -1,"Soushiki/SoushikiV1.0.safetensors", 10, string.Empty);
+    private GenerationSetupImg2Img _imageSetupImg2Img = new GenerationSetupImg2Img("1Girl", -1,"Soushiki/SoushikiV1.0.safetensors", 0,10, string.Empty);
     private string _modelPath = "../../../../ImageGeneratorBackend/models/";
+    private ModelType _modelType = ModelType.SD1;
     public RealTime()
     {
         InitializeComponent();
         ModelDropDown.ItemsSource = GetModelPaths();
+        ChangeModelType.Content = "SD1.X";
     }
 
     private string[] GetModelPaths()
@@ -40,8 +42,11 @@ public partial class RealTime : UserControl
         }
         return paths;
     }
-    
-    
+
+    private int ReadModelType()
+    {
+        return (int)_modelType;
+    }
     
     private void OnGenerateImageClick(object sender, RoutedEventArgs e)
     {
@@ -85,6 +90,7 @@ public partial class RealTime : UserControl
         _imageSetupImg2Img.Seed = ReadSeed();
         _imageSetupImg2Img.SamplingSteps = ReadSamplingSteps();
         _imageSetupImg2Img.ModelPath = GetCurrentModel();
+        _imageSetupImg2Img.ModelType = ReadModelType();
         _imageSetupImg2Img.HexString = this.SketchCanvas.GetCurrentImageAsHex();
     }
 
@@ -129,5 +135,15 @@ public partial class RealTime : UserControl
             return;
         }
         await _saveService.SaveImage(image, window);
+    }
+
+    private void ChangeModelType_OnClick(object? sender, RoutedEventArgs e)
+    {
+        _modelType += 1;
+        if (_modelType > ModelType.SDXL)
+        {
+            _modelType = 0;
+        }
+        ChangeModelType.Content = _modelType.ToString();
     }
 }

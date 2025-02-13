@@ -4,10 +4,10 @@ from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, S
 import torch
 
 class PipelineType(Enum):
-    SD_text2img = 0,
-    SD_img2img = 1,
-    SDXL_text2img = 2,
-    SDXL_img2img = 3
+    SD_text2img = 5
+    SD_img2img = 0
+    SDXL_text2img = 5
+    SDXL_img2img = 1
 
 
 
