@@ -21,12 +21,14 @@ class ImageModel(BaseModel):
     prompt:str
     seed:int
     sampling_steps:int
+    model_path:str
 
 class ImageModelImg2Img(BaseModel):
     prompt:str
     seed:int
     sampling_steps:int
     hex_string:str
+    model_path:str
 
 app = FastAPI()
 
@@ -37,9 +39,9 @@ pipeline_manager.pipeline.scheduler = DDIMScheduler.from_config(pipeline_manager
 
 @app.post("/generate_image/")
 async def generate_image(image_model:ImageModel):
-    if (pipeline_manager.pipeline_type != PipelineType.SD_text2img and pipeline_manager.pipeline_type != PipelineType.SDXL_text2img):
-        print("++++++++++++++++++++++++++++++++++++++RUN+++++++++++++++++++++++++++++++++++++++")
-        pipeline_manager.set_pipeline(PipelineType.SD_text2img, model_path)
+    if (pipeline_manager.pipeline_type != PipelineType.SD_text2img and pipeline_manager.pipeline_type != PipelineType.SDXL_text2img or pipeline_manager.model != f"models/{image_model.model_path}"):
+        pipeline_manager.set_pipeline(PipelineType.SD_text2img, f"models/{image_model.model_path}")
+        pipeline_manager.pipeline.scheduler = DDIMScheduler.from_config(pipeline_manager.pipeline.scheduler.config)
     generator = torch.Generator(device="cuda").manual_seed(image_model.seed)
     image = pipeline_manager.pipeline(image_model.prompt, num_inference_steps=image_model.sampling_steps, generator = generator).images[0]
     img_byte_arr = io.BytesIO()
@@ -55,9 +57,9 @@ async def generate_image(image_model:ImageModel):
 
 @app.post("/generate_image_img2img/")
 async def generate_image(image_model:ImageModelImg2Img):
-    if (pipeline_manager.pipeline_type != PipelineType.SD_img2img and pipeline_manager.pipeline_type != PipelineType.SDXL_img2img):
-        print("++++++++++++++++++++++++++++++++++++++RUN+++++++++++++++++++++++++++++++++++++++")
-        pipeline_manager.set_pipeline(PipelineType.SD_img2img, model_path)
+    if (pipeline_manager.pipeline_type != PipelineType.SD_img2img and pipeline_manager.pipeline_type != PipelineType.SDXL_img2img or pipeline_manager.model != f"models/{image_model.model_path}"):
+        pipeline_manager.set_pipeline(PipelineType.SD_img2img, f"models/{image_model.model_path}")
+        pipeline_manager.pipeline.scheduler = DDIMScheduler.from_config(pipeline_manager.pipeline.scheduler.config)
 
     gen_strength = 0.8
     if (image_model.sampling_steps*gen_strength < 1):

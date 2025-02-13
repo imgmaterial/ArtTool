@@ -11,12 +11,14 @@ namespace AiArtDesctop;
 
 public partial class TextToImage : UserControl
 {
-    private GenerationSetup _imageSetup = new GenerationSetup("1Girl", -1, 5);
+    private GenerationSetup _imageSetup = new GenerationSetup("1Girl", -1,"Soushiki/SoushikiV1.0.safetensors", 5);
     private readonly ImageGenerationService _imageGenerationService = new ImageGenerationService();
     private readonly ImageSaveService _saveService = new ImageSaveService();
+    private string _modelPath = "../../../../ImageGeneratorBackend/models/";
     public TextToImage()
     {
         InitializeComponent();
+        ModelDropDown.ItemsSource = GetModelPaths();
     }
     
     private async void GenerateImage()
@@ -25,6 +27,16 @@ public partial class TextToImage : UserControl
         var image = await _imageGenerationService.GenerateImageAsync(_imageSetup);
         Bitmap bitmap = new Bitmap(new MemoryStream(image));
         MainImage.Source = bitmap;
+    }
+    
+    private string[] GetModelPaths()
+    {
+        string[] paths = System.IO.Directory.GetFiles(_modelPath, "*.safetensors", SearchOption.AllDirectories);
+        for (int i = 0; i < paths.Length; i++)
+        {
+            paths[i] = paths[i].Replace(_modelPath, "");
+        }
+        return paths;
     }
     /// <summary>
     /// Read and parse the seed textbox
@@ -55,7 +67,15 @@ public partial class TextToImage : UserControl
         string? prompt = txtPromptInput.Text;
         _imageSetup.Prompt = string.IsNullOrEmpty(prompt) ? "1Girl" : prompt;
         _imageSetup.Seed = ReadSeed();
+        _imageSetup.ModelPath = GetCurrentModel();
         _imageSetup.SamplingSteps = ReadSamplingSteps();
+        
+    }
+
+    private string GetCurrentModel()
+    {
+        string? path = ModelDropDown.SelectedItem?.ToString();
+        return string.IsNullOrEmpty(path) ? "" : path;
     }
 
     private void GenerateImageButton_OnClick(object? sender, RoutedEventArgs e)

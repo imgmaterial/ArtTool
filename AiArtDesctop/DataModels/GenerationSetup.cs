@@ -12,11 +12,13 @@ public class GenerationSetup
     public int Seed { get; set; }
     [JsonPropertyName("sampling_steps")]
     public int SamplingSteps { get; set; }
-
-    public GenerationSetup(string prompt, int seed, int samplingSteps)
+    [JsonPropertyName("model_path")]
+    public string ModelPath { get; set; }
+    public GenerationSetup(string prompt, int seed,string modelPath, int samplingSteps)
     {
         this.Prompt = prompt;
         this.Seed = seed;
         this.SamplingSteps = samplingSteps;
+        this.ModelPath = modelPath;
     }
 }

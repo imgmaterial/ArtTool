@@ -12,12 +12,15 @@ public class GenerationSetupImg2Img
     public int SamplingSteps { get; set; }
     [JsonPropertyName("hex_string")]
     public string HexString { get; set; }
+    [JsonPropertyName("model_path")]
+    public string ModelPath { get; set; }
 
-    public GenerationSetupImg2Img(string prompt, int seed, int samplingSteps, string hexString)
+    public GenerationSetupImg2Img(string prompt, int seed,string modelPath, int samplingSteps, string hexString)
     {
         this.Prompt = prompt;
         this.Seed = seed;
         this.SamplingSteps = samplingSteps;
         this.HexString = hexString;
+        this.ModelPath = modelPath;
     }
 }

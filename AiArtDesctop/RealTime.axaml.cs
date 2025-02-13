@@ -23,13 +23,25 @@ public partial class RealTime : UserControl
 {
     private readonly ImageSaveService _saveService = new ImageSaveService();
     private readonly ImageGenerationService _imageGenerationService = new ImageGenerationService();
-    private GenerationSetupImg2Img _imageSetupImg2Img = new GenerationSetupImg2Img("1Girl", -1, 10, string.Empty);
+    private GenerationSetupImg2Img _imageSetupImg2Img = new GenerationSetupImg2Img("1Girl", -1,"Soushiki/SoushikiV1.0.safetensors", 10, string.Empty);
+    private string _modelPath = "../../../../ImageGeneratorBackend/models/";
     public RealTime()
     {
         InitializeComponent();
+        ModelDropDown.ItemsSource = GetModelPaths();
+    }
+
+    private string[] GetModelPaths()
+    {
+        string[] paths = System.IO.Directory.GetFiles(_modelPath, "*.safetensors", SearchOption.AllDirectories);
+        for (int i = 0; i < paths.Length; i++)
+        {
+            paths[i] = paths[i].Replace(_modelPath, "");
+        }
+        return paths;
     }
     
-
+    
     
     private void OnGenerateImageClick(object sender, RoutedEventArgs e)
     {
@@ -72,7 +84,14 @@ public partial class RealTime : UserControl
         _imageSetupImg2Img.Prompt = string.IsNullOrEmpty(prompt) ? "1Girl" : prompt;
         _imageSetupImg2Img.Seed = ReadSeed();
         _imageSetupImg2Img.SamplingSteps = ReadSamplingSteps();
+        _imageSetupImg2Img.ModelPath = GetCurrentModel();
         _imageSetupImg2Img.HexString = this.SketchCanvas.GetCurrentImageAsHex();
+    }
+
+    private string GetCurrentModel()
+    {
+        string? path = ModelDropDown.SelectedItem?.ToString();
+        return string.IsNullOrEmpty(path) ? "" : path;
     }
 
     public void OnColorChanged(object sender, ColorChangedEventArgs e)
@@ -82,7 +101,6 @@ public partial class RealTime : UserControl
 
     private void OnStrokeFinished(object sender, PointerReleasedEventArgs e)
     {
-        Console.WriteLine("test");
         GenerateImage();
     }
 
