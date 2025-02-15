@@ -22,6 +22,7 @@ class ImageModel(BaseModel):
     seed:int
     sampling_steps:int
     model_path:str
+    model_type:int
 
 class ImageModelImg2Img(BaseModel):
     prompt:str
@@ -40,8 +41,8 @@ pipeline_manager.pipeline.scheduler = DDIMScheduler.from_config(pipeline_manager
 
 @app.post("/generate_image/")
 async def generate_image(image_model:ImageModel):
-    if (pipeline_manager.pipeline_type != PipelineType.SD_text2img and pipeline_manager.pipeline_type != PipelineType.SDXL_text2img or pipeline_manager.model != f"models/{image_model.model_path}"):
-        pipeline_manager.set_pipeline(PipelineType.SD_text2img, f"models/{image_model.model_path}")
+    if (pipeline_manager.pipeline_type != PipelineType(image_model.model_type + 3) or pipeline_manager.model != f"models/{image_model.model_path}"):
+        pipeline_manager.set_pipeline(PipelineType(image_model.model_type + 3), f"models/{image_model.model_path}")
         pipeline_manager.pipeline.scheduler = DDIMScheduler.from_config(pipeline_manager.pipeline.scheduler.config)
     generator = torch.Generator(device="cuda").manual_seed(image_model.seed)
     image = pipeline_manager.pipeline(image_model.prompt, num_inference_steps=image_model.sampling_steps, generator = generator).images[0]

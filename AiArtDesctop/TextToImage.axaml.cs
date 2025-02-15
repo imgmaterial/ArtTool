@@ -11,10 +11,11 @@ namespace AiArtDesctop;
 
 public partial class TextToImage : UserControl
 {
-    private GenerationSetup _imageSetup = new GenerationSetup("1Girl", -1,"Soushiki/SoushikiV1.0.safetensors", 5);
+    private GenerationSetup _imageSetup = new GenerationSetup("1Girl", -1,"Soushiki/SoushikiV1.0.safetensors", 0,5);
     private readonly ImageGenerationService _imageGenerationService = new ImageGenerationService();
     private readonly ImageSaveService _saveService = new ImageSaveService();
     private string _modelPath = "../../../../ImageGeneratorBackend/models/";
+    private ModelType _modelType = ModelType.SD1;
     public TextToImage()
     {
         InitializeComponent();
@@ -68,10 +69,15 @@ public partial class TextToImage : UserControl
         _imageSetup.Prompt = string.IsNullOrEmpty(prompt) ? "1Girl" : prompt;
         _imageSetup.Seed = ReadSeed();
         _imageSetup.ModelPath = GetCurrentModel();
+        _imageSetup.ModelType = ReadModelType();
         _imageSetup.SamplingSteps = ReadSamplingSteps();
         
     }
 
+    private int ReadModelType()
+    {
+        return (int)_modelType;
+    }
     private string GetCurrentModel()
     {
         string? path = ModelDropDown.SelectedItem?.ToString();
@@ -92,5 +98,15 @@ public partial class TextToImage : UserControl
             return;
         }
         await _saveService.SaveImage(image, window);
+    }
+
+    private void ChangeModelType_OnClick(object? sender, RoutedEventArgs e)
+    {
+        _modelType += 1;
+        if (_modelType > ModelType.SDXL)
+        {
+            _modelType = 0;
+        }
+        ChangeModelType.Content = _modelType.ToString();
     }
 }

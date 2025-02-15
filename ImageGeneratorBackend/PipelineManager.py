@@ -4,9 +4,9 @@ from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, S
 import torch
 
 class PipelineType(Enum):
-    SD_text2img = 5
+    SD_text2img = 3
     SD_img2img = 0
-    SDXL_text2img = 5
+    SDXL_text2img = 4
     SDXL_img2img = 1
 
 

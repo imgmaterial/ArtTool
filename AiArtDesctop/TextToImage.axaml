@@ -18,7 +18,10 @@
             <Button Name="GenerateImageButton" Content="Generate Image" Click="GenerateImageButton_OnClick" Margin="5"/>
             <Button Name="SaveImage" Content="Save Image" Click="SaveImage_OnClick" Margin="5"/>
         </StackPanel>
-        <ComboBox Name="ModelDropDown"></ComboBox>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Name="ChangeModelType" Click="ChangeModelType_OnClick"></Button>
+            <ComboBox Name="ModelDropDown" Margin="10"></ComboBox>
+        </StackPanel>
         <TextBox Name="txtPromptInput"></TextBox>
     </StackPanel>
 </UserControl>
