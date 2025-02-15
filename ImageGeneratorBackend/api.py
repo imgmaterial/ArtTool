@@ -7,6 +7,7 @@ from PIL import Image
 from diffusers.utils import make_image_grid, load_image
 import io
 from PipelineManager import PipelineManager, PipelineType
+import gc
 from diffusers import (
     PNDMScheduler,
     DDIMScheduler,
@@ -16,6 +17,9 @@ from diffusers import (
     DPMSolverMultistepScheduler,
     UniPCMultistepScheduler,
 )
+def flush():
+    gc.collect()
+    torch.cuda.empty_cache()
 
 class ImageModel(BaseModel):
     prompt:str
@@ -38,10 +42,11 @@ model_path ="models/Soushiki/SoushikiV1.0.safetensors"
 pipeline_manager = PipelineManager(PipelineType.SD_img2img, model_path)
 pipeline_manager.pipeline.scheduler = DDIMScheduler.from_config(pipeline_manager.pipeline.scheduler.config)
 
-
 @app.post("/generate_image/")
 async def generate_image(image_model:ImageModel):
     if (pipeline_manager.pipeline_type != PipelineType(image_model.model_type + 3) or pipeline_manager.model != f"models/{image_model.model_path}"):
+        del pipeline_manager.pipeline
+        flush()
         pipeline_manager.set_pipeline(PipelineType(image_model.model_type + 3), f"models/{image_model.model_path}")
         pipeline_manager.pipeline.scheduler = DDIMScheduler.from_config(pipeline_manager.pipeline.scheduler.config)
     generator = torch.Generator(device="cuda").manual_seed(image_model.seed)
@@ -60,9 +65,10 @@ async def generate_image(image_model:ImageModel):
 @app.post("/generate_image_img2img/")
 async def generate_image(image_model:ImageModelImg2Img):
     if (pipeline_manager.pipeline_type != PipelineType(image_model.model_type) or pipeline_manager.model != f"models/{image_model.model_path}"):
+        del pipeline_manager.pipeline
+        flush()
         pipeline_manager.set_pipeline(PipelineType(image_model.model_type), f"models/{image_model.model_path}")
         pipeline_manager.pipeline.scheduler = DDIMScheduler.from_config(pipeline_manager.pipeline.scheduler.config)
-
     gen_strength = 0.8
     if (image_model.sampling_steps*gen_strength < 1):
         return JSONResponse(
